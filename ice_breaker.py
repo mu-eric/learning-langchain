@@ -1,10 +1,10 @@
 from langchain_core.prompts import PromptTemplate
-from langchain_openai import ChatOpenAI
-from dotenv import load_dotenv
-import os
+from langchain_core.output_parsers import StrOutputParser
+from langchain_ollama import ChatOllama
 
 information = """
-Elon Musk is a South African-born American entrepreneur and businessman who founded X.com in 1999 (which later became PayPal), SpaceX in 2002 and Tesla Motors in 2003. Musk became a multimillionaire in his late 20s when he sold his start-up company, Zip2, to a division of Compaq Computers.
+    Elon Musk is a South African-born American entrepreneur and businessman who founded X.com in 1999 (which later became PayPal), SpaceX in 2002 and Tesla Motors in 2003.
+    Musk became a multimillionaire in his late 20s when he sold his start-up company, Zip2, to a division of Compaq Computers.
 """
 
 if __name__ == "__main__":
@@ -21,9 +21,9 @@ if __name__ == "__main__":
         template=summary_template,
     )
 
-    llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
+    llm = ChatOllama(temperature=0, model="mistral")
 
-    chain = summary_prompt_template | llm
+    chain = summary_prompt_template | llm | StrOutputParser()
 
     res = chain.invoke(input={"information": information})
 
